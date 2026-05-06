@@ -9,11 +9,11 @@ const Footer = () => (
         <div className="flex items-center gap-3 mb-4">
           <img src={sigil} alt="" width={36} height={36} className="h-9 w-9" loading="lazy" />
           <span className="font-display text-xl tracking-widest text-gold-gradient">
-            RAVENCROFT
+            MORTIS
           </span>
         </div>
         <p className="font-serif italic text-muted-foreground max-w-md">
-          A dark guardian for your Discord realm. Forged in shadow, bound by oath, sworn to keep your halls in solemn order.
+          The keeper of memory, order, and the dead-quiet of a well-run realm. Bound in MySQL on Infomaniak's Swiss datacenter.
         </p>
       </div>
 
@@ -29,9 +29,9 @@ const Footer = () => (
       <div>
         <h4 className="font-display text-sm tracking-widest text-primary mb-4 uppercase">Sanctum</h4>
         <ul className="space-y-2 text-muted-foreground">
-          <li><Link to="/login" className="hover:text-primary transition-colors">Enter the Crypt</Link></li>
-          <li><a href="#" className="hover:text-primary transition-colors">Discord Coven</a></li>
-          <li><a href="#" className="hover:text-primary transition-colors">Github Codex</a></li>
+          <li><a href="https://mortisa.nekuzaky.com/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Open Dashboard</a></li>
+          <li><a href="https://mortis.nekuzaky.com/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">mortis.nekuzaky.com</a></li>
+          <li><a href="https://mortisia.nekuzaky.com/api/health" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Health Check</a></li>
         </ul>
       </div>
     </div>
@@ -39,7 +39,7 @@ const Footer = () => (
     <div className="border-t border-border/40">
       <div className="container py-6 flex flex-col md:flex-row items-center justify-between gap-2">
         <p className="font-serif text-sm text-muted-foreground italic">
-          © {new Date().getFullYear()} Ravencroft Order. All souls accounted for.
+          © {new Date().getFullYear()} Mortis. All souls accounted for.
         </p>
         <p className="font-display text-xs tracking-widest text-muted-foreground/70 uppercase">
           Memento Mori · Memento Vivere

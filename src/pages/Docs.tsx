@@ -1,13 +1,15 @@
 import { useState } from "react";
 import SiteLayout from "@/components/SiteLayout";
 import PageHeader from "@/components/PageHeader";
-import { ScrollText } from "lucide-react";
+import { ScrollText, AlertTriangle } from "lucide-react";
 
 interface Section {
   id: string;
   title: string;
   body: JSX.Element;
 }
+
+const code = (s: string) => <code className="font-mono text-primary">{s}</code>;
 
 const sections: Section[] = [
   {
@@ -16,95 +18,173 @@ const sections: Section[] = [
     body: (
       <>
         <p className="drop-cap">
-          Welcome, traveler. Binding Ravencroft to your realm is the work of a single breath. Click <em>Invoke the Bot</em> on any page and select the server you would consecrate. You must hold the <em>Manage Server</em> permission within that realm. Grant the recommended permissions when prompted — withhold none, lest some rites refuse to answer.
+          Welcome, traveler. Binding Mortis to your realm is the work of a single breath. Use the <em>Invoke Mortis</em> button on any page and choose the server you would consecrate. You must hold the <em>Manage Server</em> or <em>Administrator</em> permission within that realm.
         </p>
-        <p className="mt-4">After the binding, the Raven shall greet your halls with a brief sigil. From there, open the <em>Sanctum</em> (your dashboard) to begin the configuration.</p>
+        <p className="mt-4">After the binding, open <a href="https://mortisa.nekuzaky.com/" className="text-primary underline" target="_blank" rel="noopener noreferrer">the Sanctum</a> to begin configuration. Mortis must be granted <em>View Channel</em> at minimum, plus permissions for the modules you intend to use.</p>
       </>
     ),
   },
   {
-    id: "permissions",
-    title: "Permissions & Roles",
+    id: "memory",
+    title: "Memory",
     body: (
       <>
-        <p>Ravencroft requires the following permissions to function in full:</p>
+        <p>Mortis remembers facts you choose to share — nothing more.</p>
         <ul className="list-disc list-inside mt-4 space-y-2 marker:text-primary">
-          <li><strong>Manage Roles</strong> — to apply mutes, reaction roles, and welcome rites</li>
-          <li><strong>Ban / Kick / Moderate Members</strong> — for the rites of banishment</li>
-          <li><strong>Manage Channels</strong> — for lockdowns and channel-bound logs</li>
-          <li><strong>View Audit Log</strong> — to enrich its chronicles</li>
-          <li><strong>Send Messages, Embed Links, Add Reactions</strong> — the basic tongue</li>
+          <li>{code("/remember content:…")} — store a personal fact about yourself.</li>
+          <li>{code("/memory")} — list everything Mortis knows of you.</li>
+          <li>{code("/forget number:N")} — erase a specific memory.</li>
+          <li>{code("/remember-server content:…")} — admins add a server-wide fact.</li>
         </ul>
-        <p className="mt-4">Place the Ravencroft role <em>above</em> any role it must moderate. Discord's hierarchy is absolute.</p>
+        <p className="mt-4">Server-wide memories appear in the Sanctum's <em>Memory</em> panel and can be edited or deleted there.</p>
+      </>
+    ),
+  },
+  {
+    id: "leveling",
+    title: "Leveling",
+    body: (
+      <>
+        <p>Reward presence with XP, ranks, and roles.</p>
+        <ul className="list-disc list-inside mt-4 space-y-2 marker:text-primary">
+          <li>{code("/rank [user]")} — show XP, level and rank.</li>
+          <li>{code("/leaderboard")} — top 10 of the server.</li>
+          <li>{code("/levelrole add level:N role:…")} — auto-assign a role at level N.</li>
+        </ul>
+        <p className="mt-4">All XP, ranks and role bindings are managed from the Sanctum's <em>Leveling</em> panel.</p>
+      </>
+    ),
+  },
+  {
+    id: "moderation",
+    title: "Moderation",
+    body: (
+      <>
+        <p>Standard moderation, with every action written to the audit trail.</p>
+        <ul className="list-disc list-inside mt-4 space-y-2 marker:text-primary">
+          <li>{code("/warn user reason")} — record a warning.</li>
+          <li>{code("/kick")} {code("/ban")} {code("/unban")} {code("/timeout")} — standard actions.</li>
+          <li>{code("/purge amount:N")} — delete the last N messages.</li>
+          <li>{code("/lock")} {code("/unlock")} — seal or open a channel.</li>
+        </ul>
+        <p className="mt-4">Bind a moderation log channel with {code("/setmodlog channel:…")} to chronicle every act.</p>
       </>
     ),
   },
   {
     id: "automod",
-    title: "Auto-Mod Setup",
+    title: "Auto-Moderation",
     body: (
       <>
-        <p>The sentinel watches without rest. Open <em>Sanctum → Auto-Mod</em> and toggle the wards you require:</p>
+        <p>Wards are toggled in the Sanctum's <em>Auto-moderation</em> panel:</p>
         <ul className="list-disc list-inside mt-4 space-y-2 marker:text-primary">
-          <li><strong>Spam Ward</strong> — silences members posting more than X messages in Y seconds</li>
-          <li><strong>Invite Ward</strong> — strikes invite links from foreign realms</li>
-          <li><strong>Mention Storm</strong> — quells mass-pings before they wake the sleeping</li>
-          <li><strong>Caps Ward</strong> — for those who shout in unbroken capital</li>
-          <li><strong>Sentinel AI</strong> <em>(Premium)</em> — semantic toxicity detection</li>
+          <li>Spam filter</li>
+          <li>Link filter</li>
+          <li>Caps filter</li>
+          <li>Profanity filter</li>
         </ul>
-        <p className="mt-4">For each rule, set the punishment: <em>Warn</em>, <em>Mute (X minutes)</em>, <em>Kick</em>, or <em>Ban</em>. Tiered punishments by repeat offenses are configured separately.</p>
+        <p className="mt-4">Each ward can warn, timeout, or remove the offending message.</p>
       </>
     ),
   },
   {
-    id: "logging",
-    title: "Logging",
+    id: "configuration",
+    title: "Configuration",
     body: (
       <>
-        <p>Every shadow leaves a mark. Bind a chronicler-channel via <code className="font-mono text-primary">/config logs #channel</code> or through the Sanctum, then choose the events to record:</p>
+        <p>Set the basics either in chat or via the Sanctum.</p>
         <ul className="list-disc list-inside mt-4 space-y-2 marker:text-primary">
-          <li>Message edits and deletions (with previous content preserved)</li>
-          <li>Member joins, leaves, bans, kicks</li>
-          <li>Role and channel changes</li>
-          <li>Voice channel entries and exits</li>
-          <li>Moderation case events (warns, mutes)</li>
+          <li>{code("/config")} — view the full server configuration.</li>
+          <li>{code("/setwelcome channel:…")} — welcome message channel.</li>
+          <li>{code("/setmodlog channel:…")} — moderation log channel.</li>
+          <li>{code("/autorole add role:…")} — role given to every new member.</li>
         </ul>
-        <p className="mt-4">Logs are stored in your private archive for ninety days on the Free tier; eternal on Premium.</p>
       </>
     ),
   },
   {
-    id: "custom-commands",
-    title: "Custom Commands",
+    id: "tickets-giveaways-roles",
+    title: "Tickets · Giveaways · Reaction Roles",
     body: (
       <>
-        <p>Forge incantations unique to your realm. Open <em>Sanctum → Custom Commands → New</em>, then provide:</p>
+        <p>Three modules, three rites:</p>
         <ul className="list-disc list-inside mt-4 space-y-2 marker:text-primary">
-          <li><strong>Trigger</strong> — the slash name (e.g. <code className="font-mono text-primary">/lore</code>)</li>
-          <li><strong>Response</strong> — plain text, embed, or random list</li>
-          <li><strong>Variables</strong> — <code className="font-mono text-primary">{`{user}`}</code>, <code className="font-mono text-primary">{`{server}`}</code>, <code className="font-mono text-primary">{`{count}`}</code></li>
-          <li><strong>Restrictions</strong> — limit by role or channel</li>
+          <li>{code("/ticket")} — open a private support thread.</li>
+          <li>{code("/giveaway start prize duration")} — host a draw with automatic winners.</li>
+          <li>{code("/reactionrole add msg emoji role")} — bind an emoji on a message to a self-assignable role.</li>
         </ul>
-        <p className="mt-4">Free realms may forge five. Premium realms may forge without limit.</p>
+        <p className="mt-4">All three have their own panels in the Sanctum for editing, listing, and ending in-flight events.</p>
       </>
     ),
   },
   {
-    id: "premium",
-    title: "Premium Features",
+    id: "server-setup",
+    title: "Server Setup",
     body: (
       <>
-        <p>Patrons of the Order receive deeper magic:</p>
+        <p>Generate an entire Discord server in seconds. Pick a preset or build custom. <strong>Always preview first</strong> with {code("dryrun:true")} (or {code("/setup-preview")}).</p>
+
+        <div className="mt-6 overflow-x-auto">
+          <table className="w-full text-left font-serif border border-border/60">
+            <thead className="bg-card/60 font-display tracking-widest text-xs uppercase">
+              <tr>
+                <th className="p-3 border-b border-border/60">Preset</th>
+                <th className="p-3 border-b border-border/60">Roles</th>
+                <th className="p-3 border-b border-border/60">Categories</th>
+                <th className="p-3 border-b border-border/60">Channels</th>
+                <th className="p-3 border-b border-border/60">For</th>
+              </tr>
+            </thead>
+            <tbody className="text-sm">
+              <tr className="border-b border-border/30"><td className="p-3 text-primary">minimal</td><td className="p-3">4</td><td className="p-3">3</td><td className="p-3">6</td><td className="p-3 italic text-muted-foreground">Bare essentials.</td></tr>
+              <tr className="border-b border-border/30"><td className="p-3 text-primary">community</td><td className="p-3">8</td><td className="p-3">4</td><td className="p-3">17</td><td className="p-3 italic text-muted-foreground">General-purpose.</td></tr>
+              <tr className="border-b border-border/30"><td className="p-3 text-primary">gaming</td><td className="p-3">12</td><td className="p-3">5</td><td className="p-3">18</td><td className="p-3 italic text-muted-foreground">LFG, clips, squads.</td></tr>
+              <tr><td className="p-3 text-primary">dev</td><td className="p-3">15</td><td className="p-3">5</td><td className="p-3">24</td><td className="p-3 italic text-muted-foreground">Per-language rooms.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p className="mt-4">Existing roles or channels with the same name are <strong>skipped</strong> — re-running a preset is safe and idempotent.</p>
+      </>
+    ),
+  },
+  {
+    id: "purge",
+    title: "Purge — Dangerous",
+    body: (
+      <>
+        <div className="border-l-4 border-accent bg-accent/10 p-5 flex gap-4 items-start">
+          <AlertTriangle className="h-6 w-6 text-accent shrink-0 mt-0.5" />
+          <div>
+            <h4 className="font-display text-xl text-accent tracking-wide mb-2">Irreversible.</h4>
+            <p className="font-serif">The Purge button in the Sanctum deletes <strong>every non-default role, category, and channel</strong> in the server. It requires typed confirmation. Once invoked, it cannot be undone.</p>
+          </div>
+        </div>
+        <p className="mt-6">Reserved for full server resets — typically before applying a preset to a freshly emptied realm.</p>
+      </>
+    ),
+  },
+  {
+    id: "generators",
+    title: "Generators",
+    body: (
+      <>
+        <p>Quick utilities that compose tidy embeds:</p>
         <ul className="list-disc list-inside mt-4 space-y-2 marker:text-primary">
-          <li>Sentinel AI auto-mod</li>
-          <li>Anti-raid wards with verification gates</li>
-          <li>Eternal log retention</li>
-          <li>Music playback in voice channels</li>
-          <li>Unlimited custom commands</li>
-          <li>Priority answer from the Order's keepers</li>
-          <li>A Patron sigil beside your server's name</li>
+          <li>{code("/table title columns rows")} — formatted data table.</li>
+          <li>{code("/todo title items")} — interactive checklist.</li>
+          <li>{code("/poll question options")} — reaction-based poll.</li>
         </ul>
-        <p className="mt-4">See <em>Patronage</em> for current tithes.</p>
+      </>
+    ),
+  },
+  {
+    id: "data-privacy",
+    title: "Data & Privacy",
+    body: (
+      <>
+        <p>All per-server settings, memories, levels, logs, tickets, giveaways, snapshots, warnings, custom commands and reaction roles are stored in <strong>MySQL on Infomaniak's European (Swiss) datacenter</strong>. JSON fallback is used only if the database is unreachable.</p>
+        <p className="mt-4">We never store message content beyond what is needed for logs or memory — both of which you explicitly opt into. Snapshots keep public Discord metadata (guild, member names, roles, channels) to power the dashboard. <strong>No DMs, no emails, no tokens.</strong></p>
       </>
     ),
   },
@@ -114,20 +194,16 @@ const sections: Section[] = [
     body: (
       <div className="space-y-6">
         <div>
-          <h4 className="font-display text-xl text-primary mb-2">Will Ravencroft go offline?</h4>
-          <p>The Order vows 99.97% uptime. Should the Raven ever fall silent, status updates appear in the Coven Discord.</p>
+          <h4 className="font-display text-xl text-primary mb-2">The bot shows offline in Discord</h4>
+          <p>Check <a href="https://mortisia.nekuzaky.com/api/health" className="text-primary underline" target="_blank" rel="noopener noreferrer">mortisia.nekuzaky.com/api/health</a> — if the {code("discord")} field is {code("Mortis#1940")}, the bot is connected. If you can't see it in your server, confirm it's still in the server and has <em>View Channel</em> permission.</p>
         </div>
         <div>
-          <h4 className="font-display text-xl text-primary mb-2">Is my data safe?</h4>
-          <p>Only the bare minimum is stored — guild IDs, your settings, and (briefly) recent audit context. We never read message content beyond what auto-mod requires.</p>
+          <h4 className="font-display text-xl text-primary mb-2">I can't see my servers in the dashboard</h4>
+          <p>You need <em>Administrator</em> or <em>Manage Guild</em> on the server <strong>and</strong> Mortis must be in that server. If you just added the bot, give it ten seconds, then refresh.</p>
         </div>
         <div>
-          <h4 className="font-display text-xl text-primary mb-2">Can I remove Ravencroft?</h4>
-          <p>Of course. Banish the Raven from your server and all settings are purged within thirty days. Or sooner, by request.</p>
-        </div>
-        <div>
-          <h4 className="font-display text-xl text-primary mb-2">Where do I report a bug?</h4>
-          <p>The Coven Discord welcomes all heralds. A link awaits in the footer.</p>
+          <h4 className="font-display text-xl text-primary mb-2">Where is my data?</h4>
+          <p>MySQL on Infomaniak (Switzerland), with JSON fallback only if the database is unreachable. See <em>Data & Privacy</em> above.</p>
         </div>
       </div>
     ),
@@ -143,7 +219,7 @@ const Docs = () => {
       <PageHeader
         eyebrow="The Grimoire"
         title="Documentation"
-        subtitle="Pages from the Order's eldest tome — setup, permissions, and the deeper rites."
+        subtitle="Pages from the Order's eldest tome — modules, presets, and the deeper rites."
       />
 
       <section className="container py-16">

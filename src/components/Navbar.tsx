@@ -9,6 +9,7 @@ const links = [
   { to: "/commands", label: "Commands" },
   { to: "/docs", label: "Grimoire" },
   { to: "/pricing", label: "Patronage" },
+  { to: "/dashboard", label: "Sanctum" },
 ];
 
 const Navbar = () => {
@@ -27,7 +28,7 @@ const Navbar = () => {
             className="h-10 w-10 object-contain transition-transform duration-500 group-hover:rotate-3"
           />
           <span className="font-display text-2xl tracking-widest text-gold-gradient">
-            RAVENCROFT
+            MORTIS
           </span>
         </Link>
 
@@ -59,10 +60,10 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-3">
           <Button variant="ghost" asChild className="font-display tracking-widest text-xs uppercase">
-            <Link to="/login">Enter</Link>
+            <a href="https://mortisa.nekuzaky.com/" target="_blank" rel="noopener noreferrer">Enter</a>
           </Button>
           <Button asChild className="font-display tracking-widest text-xs uppercase shadow-candle">
-            <a href="#invite">Invoke Bot</a>
+            <a href="https://mortis.nekuzaky.com/" target="_blank" rel="noopener noreferrer">Invoke Mortis</a>
           </Button>
         </div>
 
@@ -92,10 +93,10 @@ const Navbar = () => {
             ))}
             <div className="flex gap-2 pt-2">
               <Button variant="outline" asChild className="flex-1">
-                <Link to="/login" onClick={() => setOpen(false)}>Enter</Link>
+                <a href="https://mortisa.nekuzaky.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Enter</a>
               </Button>
               <Button asChild className="flex-1">
-                <a href="#invite" onClick={() => setOpen(false)}>Invoke Bot</a>
+                <a href="https://mortis.nekuzaky.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Invoke Mortis</a>
               </Button>
             </div>
           </div>
