@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import {
   LayoutDashboard, Settings, TrendingUp, Shield, Eye, Wand2, Tags,
-  Ticket, Gift, Brain, Smile, BarChart3, LayoutTemplate, ExternalLink, Lock,
+  Ticket, Gift, Brain, Smile, BarChart3, LayoutTemplate, ExternalLink, Lock, LogOut, AlertTriangle,
 } from "lucide-react";
 import SiteLayout from "@/components/SiteLayout";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { discordAvatarUrl, guildIconUrl } from "@/lib/api";
 
 const SANCTUM_URL = "https://mortisa.nekuzaky.com/";
 
@@ -25,64 +27,166 @@ const modules = [
   { icon: LayoutTemplate, name: "Setup", desc: "Presets, custom structure, purge." },
 ];
 
-const Dashboard = () => (
-  <SiteLayout>
-    <PageHeader
-      eyebrow="The Sanctum"
-      title="Dashboard"
-      subtitle="A preview of every panel awaiting you within. Sign in to manage your realms."
-    />
-
-    <section className="container py-16">
-      <div className="parchment border border-primary/40 p-6 md:p-8 mb-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-candle">
-        <div>
-          <p className="font-display tracking-[0.4em] text-xs text-primary/80 uppercase mb-2">✦ Live Sanctum ✦</p>
-          <h2 className="font-display text-2xl md:text-3xl text-gold-gradient">Manage your realms at mortisa.nekuzaky.com</h2>
-          <p className="font-serif italic text-muted-foreground mt-2">
-            Discord login required. You need <em>Administrator</em> or <em>Manage Guild</em>, and Mortis must be in the server.
-          </p>
-        </div>
-        <Button size="lg" className="font-display tracking-widest uppercase text-xs shadow-candle h-14 px-8 shrink-0" asChild>
-          <a href={SANCTUM_URL} target="_blank" rel="noopener noreferrer">
-            Open Sanctum <ExternalLink className="ml-2 h-4 w-4" />
-          </a>
-        </Button>
+const SignedOut = ({ onSignIn }: { onSignIn: () => void }) => (
+  <section className="container py-16">
+    <div className="parchment border border-primary/40 p-10 md:p-14 text-center shadow-candle max-w-2xl mx-auto">
+      <div className="inline-flex items-center justify-center h-16 w-16 rounded-full border border-primary/40 mb-6 animate-candle-flicker">
+        <Lock className="h-7 w-7 text-primary" strokeWidth={1.2} />
       </div>
-
-      <div className="gothic-divider"><span className="font-display tracking-[0.4em] text-xs uppercase">Panels Within</span></div>
-
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
-        {modules.map((m, i) => (
-          <div
-            key={m.name}
-            className="group relative parchment border border-border/60 hover:border-primary/60 p-6 transition-all duration-500 hover:shadow-candle animate-fade-up"
-            style={{ animationDelay: `${i * 0.04}s` }}
-          >
-            <div className="absolute top-3 right-3 opacity-40 group-hover:opacity-100 transition-opacity">
-              <Lock className="h-3.5 w-3.5 text-muted-foreground" />
-            </div>
-            <m.icon className="h-8 w-8 text-primary mb-4" strokeWidth={1.2} />
-            <h3 className="font-display text-xl text-foreground tracking-wide">{m.name}</h3>
-            <p className="font-serif text-sm text-muted-foreground mt-2 leading-relaxed">{m.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="text-center mt-16">
-        <p className="font-serif italic text-muted-foreground mb-6">
-          The full sanctum lives outside this site, on the Mortis hosted dashboard.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button size="lg" className="font-display tracking-widest uppercase text-xs shadow-candle h-14 px-8" asChild>
-            <a href={SANCTUM_URL} target="_blank" rel="noopener noreferrer">Enter the Sanctum</a>
-          </Button>
-          <Button size="lg" variant="outline" className="font-display tracking-widest uppercase text-xs h-14 px-8" asChild>
-            <Link to="/docs">Read the Grimoire</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  </SiteLayout>
+      <h2 className="font-display text-3xl md:text-4xl text-gold-gradient mb-3">The doors are sealed</h2>
+      <p className="font-serif italic text-muted-foreground mb-8">
+        Speak your name through Discord. Only those with <em>Manage Guild</em> may pass.
+      </p>
+      <Button size="lg" onClick={onSignIn} className="font-display tracking-widest uppercase text-xs shadow-candle h-14 px-8">
+        Sign in with Discord
+      </Button>
+      <p className="font-serif text-xs text-muted-foreground/70 mt-6">
+        You'll be returned here after the rite.
+      </p>
+    </div>
+  </section>
 );
+
+const Loading = () => (
+  <section className="container py-32 text-center">
+    <p className="font-display tracking-[0.4em] text-xs text-primary uppercase animate-candle-flicker">
+      ✦ Consulting the registry ✦
+    </p>
+  </section>
+);
+
+const Dashboard = () => {
+  const { session, loading, signIn, signOut } = useAuth();
+
+  if (loading) {
+    return (
+      <SiteLayout>
+        <PageHeader eyebrow="The Sanctum" title="Dashboard" subtitle="Awaiting your sigil." />
+        <Loading />
+      </SiteLayout>
+    );
+  }
+
+  if (!session) {
+    return (
+      <SiteLayout>
+        <PageHeader
+          eyebrow="The Sanctum"
+          title="Dashboard"
+          subtitle="A preview of every panel awaiting you within. Sign in to manage your realms."
+        />
+        <SignedOut onSignIn={signIn} />
+      </SiteLayout>
+    );
+  }
+
+  const manageable = session.guilds.filter((g) => g.manageable);
+  const displayName = session.user.global_name || session.user.username;
+
+  return (
+    <SiteLayout>
+      <PageHeader
+        eyebrow="The Sanctum"
+        title={`Welcome, ${displayName}`}
+        subtitle="Choose a realm to govern, or open the live Sanctum."
+      />
+
+      <section className="container py-12">
+        {/* Identity / logout bar */}
+        <div className="parchment border border-border/60 p-5 mb-10 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <img
+              src={discordAvatarUrl(session.user, 96)}
+              alt=""
+              width={48}
+              height={48}
+              className="h-12 w-12 rounded-full border border-primary/40"
+            />
+            <div>
+              <p className="font-display text-lg text-foreground">{displayName}</p>
+              <p className="font-serif text-sm text-muted-foreground">@{session.user.username}</p>
+            </div>
+          </div>
+          <Button variant="ghost" onClick={signOut} className="font-display tracking-widest uppercase text-xs">
+            <LogOut className="h-4 w-4 mr-2" /> Sign out
+          </Button>
+        </div>
+
+        {/* Realms */}
+        <div className="gothic-divider"><span className="font-display tracking-[0.4em] text-xs uppercase">Your Realms</span></div>
+
+        {manageable.length === 0 ? (
+          <div className="parchment border border-accent/40 p-8 mt-10 text-center max-w-2xl mx-auto">
+            <AlertTriangle className="h-8 w-8 text-accent mx-auto mb-3" strokeWidth={1.2} />
+            <h3 className="font-display text-xl text-gold-gradient mb-2">No manageable realms</h3>
+            <p className="font-serif italic text-muted-foreground">
+              You need <em>Administrator</em> or <em>Manage Guild</em> in a server, and Mortis must be present there.
+            </p>
+            <Button asChild className="mt-6 font-display tracking-widest uppercase text-xs shadow-candle">
+              <a href="https://mortis.nekuzaky.com/" target="_blank" rel="noopener noreferrer">Invoke Mortis</a>
+            </Button>
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
+            {manageable.map((g, i) => {
+              const icon = guildIconUrl(g, 128);
+              const initials = g.name.slice(0, 2).toUpperCase();
+              return (
+                <a
+                  key={g.id}
+                  href={`${SANCTUM_URL}guild/${g.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group parchment border border-border/60 hover:border-primary/60 p-5 transition-all duration-500 hover:shadow-candle animate-fade-up flex items-center gap-4"
+                  style={{ animationDelay: `${i * 0.04}s` }}
+                >
+                  {icon ? (
+                    <img src={icon} alt="" width={56} height={56} className="h-14 w-14 rounded-full border border-primary/30" />
+                  ) : (
+                    <div className="h-14 w-14 rounded-full border border-primary/30 flex items-center justify-center font-display text-primary">
+                      {initials}
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="font-display text-lg truncate group-hover:text-primary transition-colors">{g.name}</p>
+                    <p className="font-serif text-xs text-muted-foreground">
+                      {g.hasMortis === false ? "Mortis not present — invite first" : "Manage Guild ✓"}
+                    </p>
+                  </div>
+                  <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                </a>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Modules preview */}
+        <div className="gothic-divider mt-20"><span className="font-display tracking-[0.4em] text-xs uppercase">Panels Within</span></div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
+          {modules.map((m, i) => (
+            <div
+              key={m.name}
+              className="group relative parchment border border-border/60 hover:border-primary/60 p-6 transition-all duration-500 hover:shadow-candle animate-fade-up"
+              style={{ animationDelay: `${i * 0.03}s` }}
+            >
+              <m.icon className="h-8 w-8 text-primary mb-4" strokeWidth={1.2} />
+              <h3 className="font-display text-xl text-foreground tracking-wide">{m.name}</h3>
+              <p className="font-serif text-sm text-muted-foreground mt-2 leading-relaxed">{m.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center mt-16">
+          <Button size="lg" className="font-display tracking-widest uppercase text-xs shadow-candle h-14 px-8" asChild>
+            <a href={SANCTUM_URL} target="_blank" rel="noopener noreferrer">
+              Enter the Sanctum <ExternalLink className="ml-2 h-4 w-4" />
+            </a>
+          </Button>
+        </div>
+      </section>
+    </SiteLayout>
+  );
+};
 
 export default Dashboard;
