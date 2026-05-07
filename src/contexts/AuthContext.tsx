@@ -52,8 +52,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [refresh]);
 
   const signIn = useCallback(() => {
+    // Dev bypass: ?bypass=1 in URL or stored flag → fake session, no Discord.
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("bypass") === "1" || localStorage.getItem("mortis_bypass") === "1") {
+      localStorage.setItem("mortis_bypass", "1");
+      refresh();
+      return;
+    }
     window.location.href = auth.loginUrl();
-  }, []);
+  }, [refresh]);
 
   const signOut = useCallback(async () => {
     try {
