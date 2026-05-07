@@ -1,7 +1,9 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { discordAvatarUrl } from "@/lib/api";
 import sigil from "@/assets/raven-sigil.png";
 
 const links = [
