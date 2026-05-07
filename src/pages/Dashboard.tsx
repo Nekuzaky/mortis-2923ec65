@@ -27,25 +27,39 @@ const modules = [
   { icon: LayoutTemplate, name: "Setup", desc: "Presets, custom structure, purge." },
 ];
 
-const SignedOut = ({ onSignIn }: { onSignIn: () => void }) => (
-  <section className="container py-16">
-    <div className="parchment border border-primary/40 p-10 md:p-14 text-center shadow-candle max-w-2xl mx-auto">
-      <div className="inline-flex items-center justify-center h-16 w-16 rounded-full border border-primary/40 mb-6 animate-candle-flicker">
-        <Lock className="h-7 w-7 text-primary" strokeWidth={1.2} />
+const SignedOut = ({ onSignIn }: { onSignIn: () => void }) => {
+  const enableBypass = () => {
+    localStorage.setItem("mortis_bypass", "1");
+    window.location.reload();
+  };
+  return (
+    <section className="container py-16">
+      <div className="parchment border border-primary/40 p-10 md:p-14 text-center shadow-candle max-w-2xl mx-auto">
+        <div className="inline-flex items-center justify-center h-16 w-16 rounded-full border border-primary/40 mb-6 animate-candle-flicker">
+          <Lock className="h-7 w-7 text-primary" strokeWidth={1.2} />
+        </div>
+        <h2 className="font-display text-3xl md:text-4xl text-gold-gradient mb-3">The doors are sealed</h2>
+        <p className="font-serif italic text-muted-foreground mb-8">
+          Speak your name through Discord. Only those with <em>Manage Guild</em> may pass.
+        </p>
+        <Button size="lg" onClick={onSignIn} className="font-display tracking-widest uppercase text-xs shadow-candle h-14 px-8">
+          Sign in with Discord
+        </Button>
+        <p className="font-serif text-xs text-muted-foreground/70 mt-6">
+          You'll be returned here after the rite.
+        </p>
+        <div className="mt-8 pt-6 border-t border-border/40">
+          <p className="font-serif text-xs text-muted-foreground/60 mb-3 italic">
+            Dev bypass — preview the Sanctum without OAuth.
+          </p>
+          <Button variant="outline" size="sm" onClick={enableBypass} className="font-display tracking-widest uppercase text-[10px]">
+            Enter as ghost (bypass)
+          </Button>
+        </div>
       </div>
-      <h2 className="font-display text-3xl md:text-4xl text-gold-gradient mb-3">The doors are sealed</h2>
-      <p className="font-serif italic text-muted-foreground mb-8">
-        Speak your name through Discord. Only those with <em>Manage Guild</em> may pass.
-      </p>
-      <Button size="lg" onClick={onSignIn} className="font-display tracking-widest uppercase text-xs shadow-candle h-14 px-8">
-        Sign in with Discord
-      </Button>
-      <p className="font-serif text-xs text-muted-foreground/70 mt-6">
-        You'll be returned here after the rite.
-      </p>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const Loading = () => (
   <section className="container py-32 text-center">
