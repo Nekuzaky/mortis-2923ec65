@@ -17,6 +17,8 @@ const links = [
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const { session, signIn, signOut, loading } = useAuth();
+  const displayName = session?.user.global_name || session?.user.username;
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/60">
@@ -61,12 +63,39 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" asChild className="font-display tracking-widest text-xs uppercase">
-            <a href="https://mortisa.nekuzaky.com/" target="_blank" rel="noopener noreferrer">Enter</a>
-          </Button>
-          <Button asChild className="font-display tracking-widest text-xs uppercase shadow-candle">
-            <a href="https://mortis.nekuzaky.com/" target="_blank" rel="noopener noreferrer">Invoke Mortis</a>
-          </Button>
+          {session ? (
+            <>
+              <Link to="/dashboard" className="flex items-center gap-2 group">
+                <img
+                  src={discordAvatarUrl(session.user, 64)}
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 rounded-full border border-primary/40"
+                />
+                <span className="font-display text-xs tracking-widest uppercase text-muted-foreground group-hover:text-primary transition-colors">
+                  {displayName}
+                </span>
+              </Link>
+              <Button variant="ghost" size="icon" onClick={signOut} aria-label="Sign out" title="Sign out">
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                onClick={signIn}
+                disabled={loading}
+                className="font-display tracking-widest text-xs uppercase"
+              >
+                Sign in
+              </Button>
+              <Button asChild className="font-display tracking-widest text-xs uppercase shadow-candle">
+                <a href="https://mortis.nekuzaky.com/" target="_blank" rel="noopener noreferrer">Invoke Mortis</a>
+              </Button>
+            </>
+          )}
         </div>
 
         <button
