@@ -64,7 +64,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signOut = useCallback(async () => {
     try {
-      await auth.logout();
+      if (localStorage.getItem("mortis_bypass") === "1") {
+        localStorage.removeItem("mortis_bypass");
+      } else {
+        await auth.logout();
+      }
     } catch (e) {
       setError((e as Error).message);
     }
