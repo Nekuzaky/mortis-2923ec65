@@ -8,7 +8,9 @@ import Commands from "./pages/Commands.tsx";
 import Docs from "./pages/Docs.tsx";
 import Pricing from "./pages/Pricing.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import AuthCallback from "./pages/AuthCallback.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -18,15 +20,18 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/commands" element={<Commands />} />
-          <Route path="/docs" element={<Docs />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/commands" element={<Commands />} />
+            <Route path="/docs" element={<Docs />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
