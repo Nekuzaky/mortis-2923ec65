@@ -123,9 +123,15 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="flex gap-2 pt-2">
-              <Button variant="outline" asChild className="flex-1">
-                <a href="https://mortisa.nekuzaky.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Enter</a>
-              </Button>
+              {session ? (
+                <Button variant="outline" className="flex-1" onClick={() => { signOut(); setOpen(false); }}>
+                  <LogOut className="h-4 w-4 mr-2" /> Sign out
+                </Button>
+              ) : (
+                <Button variant="outline" className="flex-1" onClick={() => { signIn(); setOpen(false); }}>
+                  Sign in
+                </Button>
+              )}
               <Button asChild className="flex-1">
                 <a href="https://mortis.nekuzaky.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Invoke Mortis</a>
               </Button>
