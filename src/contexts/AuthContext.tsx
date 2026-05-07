@@ -20,6 +20,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const refresh = useCallback(async () => {
     try {
       setLoading(true);
+      // Dev bypass — skip backend OAuth and use a fake session.
+      if (typeof window !== "undefined" && localStorage.getItem("mortis_bypass") === "1") {
+        setSession({
+          user: {
+            id: "000000000000000000",
+            username: "necromancer",
+            global_name: "Necromancer (bypass)",
+            avatar: null,
+          },
+          guilds: [
+            { id: "111111111111111111", name: "Crypt of Mortis", icon: null, manageable: true, hasMortis: true },
+            { id: "222222222222222222", name: "Test Realm", icon: null, manageable: true, hasMortis: true },
+          ],
+        });
+        setError(null);
+        return;
+      }
       const s = await auth.me();
       setSession(s);
       setError(null);
