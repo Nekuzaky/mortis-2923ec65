@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { inviteUrl } from "@/lib/api";
 import sigil from "@/assets/raven-sigil.png";
 
 const Footer = () => (
@@ -29,8 +30,8 @@ const Footer = () => (
       <div>
         <h4 className="font-display text-sm tracking-widest text-primary mb-4 uppercase">Sanctum</h4>
         <ul className="space-y-2 text-muted-foreground">
+          <li><a href={inviteUrl()} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Invite to Discord</a></li>
           <li><a href="https://mortisa.nekuzaky.com/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Open Dashboard</a></li>
-          <li><a href="https://mortis.nekuzaky.com/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">mortis.nekuzaky.com</a></li>
           <li><a href="https://mortisia.nekuzaky.com/api/health" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Health Check</a></li>
         </ul>
       </div>
