@@ -7,7 +7,7 @@ import SiteLayout from "@/components/SiteLayout";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { discordAvatarUrl, guildIconUrl } from "@/lib/api";
+import { discordAvatarUrl, guildIconUrl, inviteUrl } from "@/lib/api";
 
 const SANCTUM_URL = "https://mortisa.nekuzaky.com/";
 
