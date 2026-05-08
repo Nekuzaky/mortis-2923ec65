@@ -3,8 +3,9 @@ import { Check, Heart } from "lucide-react";
 import SiteLayout from "@/components/SiteLayout";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
+import { inviteUrl } from "@/lib/api";
 
-const SITE_URL = {inviteUrl()};
+const SITE_URL = inviteUrl();
 
 const freeFeatures = [
   "All modules included — Memory, Leveling, Moderation, Tickets, Giveaways, Reaction Roles",
