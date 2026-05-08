@@ -3,8 +3,10 @@ import { useState } from "react";
 import { LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { discordAvatarUrl } from "@/lib/api";
+import { discordAvatarUrl, inviteUrl } from "@/lib/api";
 import sigil from "@/assets/raven-sigil.png";
+
+const INVITE = inviteUrl();
 
 const links = [
   { to: "/", label: "Home" },
