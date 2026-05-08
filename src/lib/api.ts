@@ -6,6 +6,40 @@ export const API_BASE =
   (import.meta.env.VITE_MORTIS_API as string | undefined) ??
   "https://mortisia.nekuzaky.com";
 
+export const DISCORD_CLIENT_ID = "1494081259172003990";
+
+/**
+ * Recommended permissions bitfield for Mortis.
+ * Includes: view/send/manage messages, kick/ban/timeout, manage channels/roles/nicknames/webhooks/emojis,
+ * view audit log, add reactions, embed links, attach files, read history, external emojis, voice mute/deafen/move.
+ * Excludes Administrator (8) on purpose.
+ */
+export const MORTIS_PERMISSIONS = "1101659570230";
+
+export function inviteUrl(guildId?: string) {
+  const url = new URL("https://discord.com/oauth2/authorize");
+  url.searchParams.set("client_id", DISCORD_CLIENT_ID);
+  url.searchParams.set("scope", "bot applications.commands");
+  url.searchParams.set("permissions", MORTIS_PERMISSIONS);
+  if (guildId) {
+    url.searchParams.set("guild_id", guildId);
+    url.searchParams.set("disable_guild_select", "true");
+  }
+  return url.toString();
+}
+
+export type BotStats = {
+  guilds: number;
+  users: number;
+  commands?: number;
+  shards?: number;
+  uptime?: number;
+};
+
+export const stats = {
+  get: () => apiFetch<BotStats>("/stats"),
+};
+
 export type DiscordUser = {
   id: string;
   username: string;
