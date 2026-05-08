@@ -4,7 +4,7 @@ import SiteLayout from "@/components/SiteLayout";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 
-const SITE_URL = "https://mortis.nekuzaky.com/";
+const SITE_URL = {inviteUrl()};
 
 const freeFeatures = [
   "All modules included — Memory, Leveling, Moderation, Tickets, Giveaways, Reaction Roles",

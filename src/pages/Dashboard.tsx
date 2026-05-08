@@ -137,7 +137,7 @@ const Dashboard = () => {
               You need <em>Administrator</em> or <em>Manage Guild</em> in a server, and Mortis must be present there.
             </p>
             <Button asChild className="mt-6 font-display tracking-widest uppercase text-xs shadow-candle">
-              <a href="https://mortis.nekuzaky.com/" target="_blank" rel="noopener noreferrer">Invoke Mortis</a>
+              <a href={inviteUrl()} target="_blank" rel="noopener noreferrer">Invoke Mortis</a>
             </Button>
           </div>
         ) : (
