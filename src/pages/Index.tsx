@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
-import { Brain, TrendingUp, Shield, Eye, Ticket, Gift, Tags, LayoutTemplate, Wand2, Sparkles, ArrowRight, ChevronRight } from "lucide-react";
+import { Brain, TrendingUp, Shield, Eye, Ticket, Gift, Tags, LayoutTemplate, Wand2, ArrowRight, ChevronRight, Server, Users, Zap, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SiteLayout from "@/components/SiteLayout";
 import Embers from "@/components/Embers";
+import CountUp from "@/components/CountUp";
+import { useStats } from "@/hooks/useStats";
+import { inviteUrl } from "@/lib/api";
 import hero from "@/assets/hero-cathedral.jpg";
 import sigil from "@/assets/raven-sigil.png";
 
-const DASHBOARD_URL = "https://mortisa.nekuzaky.com/";
-const SITE_URL = "https://mortis.nekuzaky.com/";
+const INVITE = inviteUrl();
 
 const features = [
   { icon: Brain, title: "Memory", body: "Mortis remembers personal facts and server-wide lore — opt-in, per user, deletable at will." },
@@ -19,13 +21,6 @@ const features = [
   { icon: Tags, title: "Reaction Roles", body: "Bind emoji on a message to roles. Members anoint themselves with a touch." },
   { icon: LayoutTemplate, title: "Server Setup Presets", body: "Generate an entire server from minimal, community, gaming or dev presets — preview-first, always safe." },
   { icon: Wand2, title: "Generators & Custom Commands", body: "Tables, todos, polls and trigger/response custom commands for your realm." },
-];
-
-const stats = [
-  { value: "EU", label: "Swiss Datacenter" },
-  { value: "MySQL", label: "Persistent Storage" },
-  { value: "30+", label: "Slash Commands" },
-  { value: "24/7", label: "Sworn Vigil" },
 ];
 
 const Index = () => {
