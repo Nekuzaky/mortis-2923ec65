@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { inviteUrl } from "@/lib/api";
-import sigil from "@/assets/raven-sigil.png";
+import logo from "@/assets/red-eye.png";
 
 const Footer = () => (
   <footer className="relative border-t border-border/60 mt-32">
