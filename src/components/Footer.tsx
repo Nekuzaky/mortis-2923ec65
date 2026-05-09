@@ -8,7 +8,7 @@ const Footer = () => (
     <div className="container relative py-16 grid gap-12 md:grid-cols-4">
       <div className="md:col-span-2">
         <div className="flex items-center gap-3 mb-4">
-          <img src={sigil} alt="" width={36} height={36} className="h-9 w-9" loading="lazy" />
+          <img src={logo} alt="" width={36} height={36} className="h-9 w-9 drop-shadow-[0_0_10px_hsl(var(--primary)/0.6)]" loading="lazy" />
           <span className="font-display text-xl tracking-widest text-gold-gradient">
             MORTIS
           </span>
@@ -19,11 +19,12 @@ const Footer = () => (
       </div>
 
       <div>
-        <h4 className="font-display text-sm tracking-widest text-primary mb-4 uppercase">The Order</h4>
+        <h4 className="font-display text-sm tracking-widest text-primary mb-4 uppercase">L'Ordre</h4>
         <ul className="space-y-2 text-muted-foreground">
-          <li><Link to="/commands" className="hover:text-primary transition-colors">Commands</Link></li>
-          <li><Link to="/docs" className="hover:text-primary transition-colors">Grimoire</Link></li>
-          <li><Link to="/pricing" className="hover:text-primary transition-colors">Patronage</Link></li>
+          <li><Link to="/commands" className="hover:text-primary transition-colors">Commandes</Link></li>
+          <li><Link to="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link></li>
+          <li><Link to="/soutenir" className="hover:text-primary transition-colors">Soutenir</Link></li>
+          <li><Link to="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
         </ul>
       </div>
 
