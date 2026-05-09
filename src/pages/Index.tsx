@@ -7,7 +7,7 @@ import CountUp from "@/components/CountUp";
 import { useStats } from "@/hooks/useStats";
 import { inviteUrl } from "@/lib/api";
 import hero from "@/assets/hero-cathedral.jpg";
-import sigil from "@/assets/raven-sigil.png";
+import sigil from "@/assets/red-eye.png";
 
 const INVITE = inviteUrl();
 
