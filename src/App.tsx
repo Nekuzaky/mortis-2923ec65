@@ -9,6 +9,7 @@ import Docs from "./pages/Docs.tsx";
 import Pricing from "./pages/Pricing.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import AuthCallback from "./pages/AuthCallback.tsx";
+import Contact from "./pages/Contact.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -26,6 +27,8 @@ const App = () => (
             <Route path="/commands" element={<Commands />} />
             <Route path="/docs" element={<Docs />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/soutenir" element={<Pricing />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
